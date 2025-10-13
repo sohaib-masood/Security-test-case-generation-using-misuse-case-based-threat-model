@@ -1,0 +1,4 @@
+Extracted Information:
+Entities (Classes): ['SYSTEM', 'SCRIPT', 'SQL', 'EXPLOITS', 'USER', 'MALICIOUS_USER', 'RFS', 'RESUME', 'END']
+Attributes: ['malicious', 'unauthorized', 'Attack', 'Alternative', 'MALICIOUS_USER', 'Primary', 'SYSTEM', 'input', 'Threat', 'user', 'RFS', 'step', 'RESUME', 'Basic', 'MALICIOUS', 'SQL', 'unable', 'RESEUME', 'process', 'Malicious', 'Flow', 'Injection', 'Misuse', 'Specific']
+Relationships (Actions): ['accessed', 'using', 'provides', 'validate', 'input', 'results', 'provide', 'executed', 'detected', 'EXPLOITS', 'injects', 'prevents', 'processes', 'interact']
