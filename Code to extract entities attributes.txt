@@ -1,0 +1,23 @@
+import spacy
+
+nlp = spacy.load("en_core_web_sm")
+doc = nlp(data)
+
+entities = set()       
+attributes = set()     
+relationships = set() 
+for token in doc:
+    
+    if token.text.isupper() and token.pos_ in ["NOUN", "PROPN"]:
+        entities.add(token.text)
+    
+    if token.dep_ in ["amod", "compound", "nmod"]:
+        attributes.add(token.text)
+    
+    if token.pos_ == "VERB":
+        relationships.add(token.text)
+
+print("\nExtracted Information:")
+print("Entities (Classes):", list(entities))
+print("Attributes:", list(attributes))
+print("Relationships (Actions):", list(relationships))
