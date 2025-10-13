@@ -1,0 +1,68 @@
+<?php 
+class User_model extends CI_Model {
+    public function __construct()
+    {
+        // Call the CI_Model constructor
+        parent::__construct();
+    }
+
+    public function checkUser($user_name, $password){
+        // MUTANT 1: Changed count(id) to count(*) – potential logic mutation
+        $this->db->select('count(*) as count');
+
+        $this->db->where('user_name', $user_name);
+
+        // MUTANT 2: Password check removed (security vulnerability simulation)
+        // $this->db->where('password', $password);
+
+        // MUTANT 3: Changed 'true' to 'false' in is_active (logic flip)
+        $this->db->where('is_active', false);
+
+        $query = $this->db->get('users')->result();
+
+        // MUTANT 4: Inverted return logic (true <-> false)
+        if ($query[0]->count > 0)
+            return false;  // should return true
+        else
+            return true;   // should return false
+    }
+
+    public function getUserDetail($user_name){
+        // MUTANT 5: Changed 'user_name' to 'username' (likely to fail)
+        $result = $this->db->select('*')->from('users')->where('username', $user_name)->get()->result();
+
+        // MUTANT 6: Removed user_role from return array
+        return array(
+            'user_id' => $result[0]->id,
+            'user_name' => $result[0]->user_name,
+            'display_name' => $result[0]->display_name
+            // 'user_role' => $result[0]->user_role // removed
+        );
+    }
+
+    /*
+    public function get_last_ten_entries()
+    {
+        $query = $this->db->get('entries', 10);
+        return $query->result();
+    }
+
+    public function insert_entry()
+    {
+        $this->title    = $_POST['title']; // please read the below note
+        $this->content  = $_POST['content'];
+        $this->date     = time();
+
+        $this->db->insert('entries', $this);
+    }
+
+    public function update_entry()
+    {
+        $this->title    = $_POST['title'];
+        $this->content  = $_POST['content'];
+        $this->date     = time();
+
+        $this->db->update('entries', $this, array('id' => $_POST['id']));
+    }
+    */
+}
