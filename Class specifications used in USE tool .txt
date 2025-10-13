@@ -1,0 +1,49 @@
+model MaliciousModel
+
+
+class System
+attributes
+    
+    detected  Boolean
+	 Processinput  Boolean
+    Rejectinput  Boolean
+	Userinput  String
+end
+
+class Malicious_user
+attributes
+	Executionmethod  String
+    Name  String
+    Inputdata  String
+    
+end
+
+class Executescript
+attributes
+    executed  Boolean
+    Scripttype  String
+end
+
+class ExecuteSQL_Query
+attributes
+    executed  Boolean
+    Querytype  String
+end
+
+association InputsData
+between
+    Malicious_user[1] role user
+    System[1] role system
+end
+
+association ExecuteScript
+between
+    System[1] role system
+    Executescript[1] role script
+end
+
+association ExecuteQuery
+between
+    System[1] role system
+    ExecuteSQL_Query[1] role query
+end
