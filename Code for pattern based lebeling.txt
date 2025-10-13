@@ -1,0 +1,58 @@
+import spacy
+
+nlp = spacy.load("en_core_web_sm")
+
+doc = nlp(data)
+
+input_statements = set()      
+output_statements = set()    
+condition_statements = set()  
+
+input_keywords = {"inputs", "enters", "provides", "requests", "input"}
+output_keywords = {"displays", "sends", "response", "executes", "exploits", "logs", "modifies", "writes", "updates", "deletes"}
+condition_keywords = {"IF", "WHEN", "VALIDATES", "THEN"}
+
+
+system_entities = {"SYSTEM", "MALICIOUS_USER", "DATABASE", "APPLICATION"}
+
+
+for sent in doc.sents:
+    sent_text = sent.text.strip()
+
+ 
+    contains_system_entity = any(entity in sent_text.upper() for entity in system_entities)
+
+
+    contains_output_action = any(word.lemma_ in output_keywords for word in sent)
+
+    is_input = False
+    is_output = False
+    is_condition = False
+
+    for token in sent:
+     
+        if token.lemma_ in input_keywords or ("USER" in sent_text.upper() and token.dep_ in ["dobj", "nsubj"]):
+            input_statements.add(sent_text)
+            is_input = True
+
+       
+        if contains_system_entity and contains_output_action:
+            output_statements.add(sent_text)
+            is_output = True
+
+        
+        if token.text.upper() in condition_keywords or token.dep_ in ["mark"]:
+            condition_statements.add(sent_text)
+            is_condition = True
+
+    if is_input and is_output:
+        output_statements.add(sent_text)
+    if is_input and is_condition:
+        condition_statements.add(sent_text)
+    if is_output and is_condition:
+        condition_statements.add(sent_text)
+
+print("\nPattern based labeling:")
+print("Input Statements:", list(input_statements))
+print("Output Statements:", list(output_statements))
+print("Condition Statements:", list(condition_statements))
